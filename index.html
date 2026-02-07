@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Presentes - Chá do Pedro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --azul-suave: #7fa6b8;
+            --azul-escuro: #3d5a6b;
+            --bege: #e8d5c4;
+            --terracota: #c99b7a;
+            --nuvem: #e8f1f5;
+            --branco: #ffffff;
+            --sombra: rgba(61, 90, 107, 0.15);
+        }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: linear-gradient(to bottom, #f0f7fa 0%, #ffffff 100%);
+            color: var(--azul-escuro);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Decoração com nuvens flutuantes */
+        .cloud {
+            position: absolute;
+            background: var(--nuvem);
+            border-radius: 100px;
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .cloud:nth-child(1) {
+            width: 120px;
+            height: 50px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .cloud:nth-child(2) {
+            width: 90px;
+            height: 40px;
+            top: 25%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+
+        .cloud:nth-child(3) {
+            width: 140px;
+            height: 55px;
+            top: 60%;
+            left: 8%;
+            animation-delay: 6s;
+        }
+
+        .cloud:nth-child(4) {
+            width: 100px;
+            height: 45px;
+            bottom: 20%;
+            right: 5%;
+            animation-delay: 9s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 0;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 30px;
+        }
+
+        /* Foto de Capa */
+        .header-cover {
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 0 0 40px 40px;
+            box-shadow: 0 10px 40px var(--sombra);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 4.5rem;
+            color: var(--azul-escuro);
+            margin: 20px 0 10px;
+            line-height: 1.1;
+            font-weight: 700;
+            display: none;
+        }
+
+        .nome-bebe {
+            color: var(--azul-suave);
+            display: block;
+            font-size: 5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--azul-suave);
+            font-weight: 400;
+            margin-top: 15px;
+            letter-spacing: 0.5px;
+            display: none;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Grid de instruções - 2 colunas */
+        .instructions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* Instruções */
+        .instructions {
+            background: var(--branco);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 20px var(--sombra);
+            border: 2px solid var(--nuvem);
+        }
+
+        .instructions h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 1.6rem;
+            color: var(--azul-escuro);
+            margin-bottom: 12px;
+        }
+
+        .instructions p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--azul-suave);
+            margin-bottom: 8px;
+        }
+
+        .instructions strong {
+            color: var(--azul-escuro);
+        }
+
+        /* Grade de presentes */
+        .gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        /* Título de Seção */
+        .section-title {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--azul-suave) 0%, var(--azul-escuro) 100%);
+            color: var(--branco);
+            padding: 20px 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            box-shadow: 0 5px 20px rgba(127, 166, 184, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(10%, 10%);
+            }
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .gift-card {
+            background: var(--branco);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px var(--sombra);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 3px solid transparent;
+            position: relative;
+        }
+
+        .gift-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(127, 166, 184, 0.3);
+            border-color: var(--azul-suave);
+        }
+
+        .gift-card.reserved {
+            opacity: 0.7;
+            border-color: var(--terracota);
+        }
+
+        .gift-card.reserved::before {
+            content: '✓ Reservado';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--terracota);
+            color: var(--branco);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .gift-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            background: var(--nuvem);
+        }
+
+        .gift-card:hover .gift-image {
+            transform: scale(1.05);
+        }
+
+        .gift-info {
+            padding: 12px;
+        }
+
+        .gift-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--azul-escuro);
+            margin-bottom: 10px;
+            line-height: 1.3;
+            min-height: 36px;
+        }
+
+        .gift-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Jost', sans-serif;
+        }
+
+        .btn-reserve {
+            background: var(--azul-suave);
+            color: var(--branco);
+        }
+
+        .btn-reserve:hover {
+            background: var(--azul-escuro);
+            transform: scale(1.05);
+        }
+
+        .btn-unreserve {
+            background: var(--terracota);
+            color: var(--branco);
+        }
+
+        .btn-unreserve:hover {
+            background: #a87d5f;
+            transform: scale(1.05);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(61, 90, 107, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: var(--branco);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-content h3 {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            color: var(--azul-escuro);
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            font-size: 1.1rem;
+            color: var(--azul-suave);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--nuvem);
+            border-radius: 12px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-family: 'Jost', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            border-color: var(--azul-suave);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-confirm {
+            background: var(--azul-suave);
+            color: var(--branco);
+        }
+
+        .btn-confirm:hover {
+            background: var(--azul-escuro);
+        }
+
+        .btn-cancel {
+            background: var(--bege);
+            color: var(--azul-escuro);
+        }
+
+        .btn-cancel:hover {
+            background: var(--terracota);
+            color: var(--branco);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            color: var(--azul-suave);
+            cursor: pointer;
+            border: none;
+            background: none;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--azul-escuro);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--azul-suave);
+            font-size: 0.95rem;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Responsivo */
+        @media (max-width: 1400px) {
+            .gifts-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .gifts-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .instructions-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-cover {
+                height: 300px;
+                border-radius: 0 0 25px 25px;
+            }
+
+            .gifts-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+
+            .modal-content {
+                padding: 30px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-cover {
+                height: 250px;
+            }
+            
+            .gifts-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+
+        /* Placeholder para imagens */
+        .gift-image-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, var(--nuvem) 0%, var(--bege) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--azul-suave);
+        }
+    </style>
+</head>
+<body>
+    <!-- Nuvens decorativas -->
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+
+    <header>
+        <!-- 
+        ╔═══════════════════════════════════════════════════════════╗
+        ║  ADICIONE SUA IMAGEM DE CAPA AQUI                         ║
+        ╚═══════════════════════════════════════════════════════════╝
+        
+        PASSO A PASSO SIMPLES:
+        
+        1. Salve este arquivo HTML e a imagem PNG na MESMA PASTA
+        
+        2. Logo abaixo, onde está escrito:
+           url('SUBSTITUA_AQUI')
+           
+        3. Apague SUBSTITUA_AQUI e escreva exatamente:
+           Lista_de_Presentes_com_elementos_suaves.png
+           
+        4. Deve ficar assim:
+           url('Lista_de_Presentes_com_elementos_suaves.png')
+           
+        5. Salve este arquivo e abra no navegador
+        
+        ✅ PRONTO! A imagem vai aparecer!
+        -->
+        
+        <div class="header-cover" style="background-image: url('https://i.ibb.co/bj2qzCKG/Chat-GPT-Image-7-de-fev-de-2026-09-03-18.png');">
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="instructions-grid">
+            <!-- Quadro Como Funciona -->
+            <div class="instructions">
+                <h2>Como funciona? 💙</h2>
+                <p><strong>1.</strong> Navegue pelos presentes e clique na foto do item que deseja comprar para ver mais detalhes na loja.</p>
+                <p><strong>2.</strong> Gostou? Clique em <strong>"Quero presentear!"</strong> e digite seu nome para reservar o item.</p>
+                <p><strong>3.</strong> Itens reservados ficam marcados para que outros convidados não comprem o mesmo presente.</p>
+                <p style="margin-top: 20px; color: var(--azul-escuro);">🏪 A lista de presentes também está disponível na loja <strong>Mundo Baby e Kids CNP</strong>.</p>
+                <p style="margin-top: 10px; color: var(--azul-escuro);">✨ Cada presente é especial e ajudará a preparar a chegada do Pedro com muito amor!</p>
+            </div>
+
+            <!-- Quadro Notas do Pedrinho -->
+            <div class="instructions">
+                <h2>Notas do Pedrinho 👶</h2>
+                <p>📝 <strong>1.</strong> Essa é a lista de desejos da minha mamãe de primeira viagem, considerem se ela se exceder nos desejos rsrsr.</p>
+                <p>📅 <strong>2.</strong> Meus papais colocaram itens que eles acham que eu precisarei até completar meu primeiro ano.</p>
+                <p>💝 <strong>3.</strong> Alguns itens dessa lista são meros caprichos da mamãe e ela vai gostar de receber (nem que saia do bolso do papai rsrsr).</p>
+                <p>👕 <strong>4.</strong> Eu já ganhei bastante roupinhas, então se essa for uma opção de presente para mim, escolha roupinhas +6 meses.</p>
+                <p>💡 <strong>5.</strong> Se você sabe de algum item que é essencial para mim e a mamãe esqueceu de colocar na lista, ajude ela (é a primeira vez que ela tá fazendo isso rsrsr).</p>
+                <p>♻️ <strong>6.</strong> Eu e meus papais não nos importamos de ganhar itens usados, a gente economiza e ajuda o meio ambiente.</p>
+            </div>
+        </div>
+
+        <div id="gifts-grid" class="gifts-grid">
+            <!-- Os itens serão carregados aqui -->
+        </div>
+    </div>
+
+    <!-- Modal de confirmação -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <h3 id="modal-title">Confirmar presente</h3>
+            <p id="modal-message">Digite seu nome para reservar este presente:</p>
+            <input type="text" id="guest-name" placeholder="Seu nome completo">
+            <div class="modal-buttons">
+                <button class="btn btn-confirm" onclick="confirmReservation()">Confirmar</button>
+                <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>💙 Feito com amor para o Pedro 💙</p>
+        <p>07 de Março de 2025 • 16h • Recanto Tropical</p>
+    </footer>
+
+    <script>
+        // ============================================
+        // DADOS DOS PRESENTES
+        // ============================================
+        // INSTRUÇÕES PARA ADICIONAR FOTOS:
+        // 
+        // Opção 1 - Link direto da loja (RECOMENDADO):
+        //   - Vá até o produto na loja online
+        //   - Clique direito na foto → "Copiar endereço da imagem"
+        //   - Cole no campo "image"
+        //
+        // Opção 2 - Upload em site de imagens:
+        //   - Acesse imgbb.com ou imgur.com
+        //   - Faça upload da sua foto
+        //   - Copie o "Direct link" ou "URL direto"
+        //   - Cole no campo "image"
+        //
+        // Opção 3 - Imagem local (mesma pasta):
+        //   - Salve a foto na mesma pasta deste arquivo HTML
+        //   - Use apenas: "nome-da-foto.jpg"
+        //
+        // EXEMPLO COMPLETO:
+        // {
+        //     id: 1,
+        //     name: "Berço Portátil",
+        //     image: "https://i.ibb.co/abc123/berco.jpg",  ← Cole aqui o link da sua foto
+        //     link: "https://amazon.com.br/berco-portatil"  ← Link da loja
+        // }
+        
+        const gifts = [
+            // ═══════════════════════════════════════════════════════
+            // CUIDADOS COM O BEBÊ (8 itens)
+            // ═══════════════════════════════════════════════════════
+            {
+                id: 1,
+                name: "Kit Termômetro e Nebulizador",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-821du-mgips337ak96cf.webp",
+                link: "https://s.shopee.com.br/1La5gIRyJl"
+            },
+            {
+                id: 2,
+                name: "Kit Unhas",
+                image: "https://down-br.img.susercontent.com/file/e3408a641d6cd460dced3c5a1663ca6e.webp",
+                link: "https://s.shopee.com.br/2LScsK638r"
+            },
+            {
+                id: 3,
+                name: "Kit Cabelos",
+                image: "https://down-br.img.susercontent.com/file/f0ea3434280d0cab0c5485bf366ba90d.webp",
+                link: "https://s.shopee.com.br/2Vm3AnRAHr"
+            },
+            {
+                id: 4,
+                name: "Aspirador Nasal",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rdw5-mcmff5opxjr0fd.webp",
+                link: "https://s.shopee.com.br/AUoKbpxly9"
+            },
+            {
+                id: 5,
+                name: "Bolsa Térmica Alívio de Cólica",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m3i2y04xijp412.webp",
+                link: "https://s.shopee.com.br/3B1jtGOvk7"
+            },
+            {
+                id: 6,
+                name: "Xô Febre",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mg7dzmv8uwhz58.webp",
+                link: "https://s.shopee.com.br/W0ygftdS9"
+            },
+            {
+                id: 7,
+                name: "Dosador de Remédio com Bico",
+                image: "https://down-br.img.susercontent.com/file/33421b01c989785107ceac12f5cbc511.webp",
+                link: "https://s.shopee.com.br/8Kjq37Vi30"
+            },
+            {
+                id: 8,
+                name: "Kit Primeiros Dentinhos",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mijrizy9i3nq27.webp",
+                link: "https://s.shopee.com.br/1La5fbwXak"
+            },
+
+            // ═══════════════════════════════════════════════════════
+            // HIGIENE DO BEBÊ (12 itens)
+            // ═══════════════════════════════════════════════════════
+            {
+                id: 9,
+                name: "Kit Mamãe Bebê",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-82300-mi62o2vnc1z61c.webp",
+                link: "https://s.shopee.com.br/8fMgOqac7U"
+            },
+            {
+                id: 10,
+                name: "Kit Huggies",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mbz5w8e449eve8.webp",
+                link: "https://s.shopee.com.br/W0yfuUPwW"
+            },
+            {
+                id: 11,
+                name: "Cotonetes Baby",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-8259t-mg7w9xnxbk7cab.webp",
+                link: "https://s.shopee.com.br/9fFDi7DqSs"
+            },
+            {
+                id: 12,
+                name: "Folhas de Algodão",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rfi6-m94l5xzjd3mv59.webp",
+                link: "https://s.shopee.com.br/gKP0j1M7Y"
+            },
+            {
+                id: 13,
+                name: "Soro Fisiológico",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mfd0hxal4c93b8.webp",
+                link: "https://s.shopee.com.br/1VtW0L4tUm"
+            },
+            {
+                id: 14,
+                name: "Pomada Bepantol",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-22100-p84c5jsveiiv32.webp",
+                link: "https://s.shopee.com.br/5VPelzHjMG"
+            },
+            {
+                id: 15,
+                name: "Lenço Umedecidos",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mf0he7dqlmo52e.webp",
+                link: "https://s.shopee.com.br/50TOAwMvzc"
+            },
+            {
+                id: 16,
+                name: "Fraldas Eco",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m65rxj07pj7p6d.webp",
+                link: "https://s.shopee.com.br/7KrKunE2Fu"
+            },
+            {
+                id: 17,
+                name: "Fraldas de Boca",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m0x3a40ojxef89.webp",
+                link: "https://s.shopee.com.br/gKP2NLgF3"
+            },
+            {
+                id: 18,
+                name: "Fraldas de Banho",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m0x3a40oo53r2d.webp",
+                link: "https://s.shopee.com.br/gKP2NLgF3"
+            },
+            {
+                id: 19,
+                name: "Toalhas de Banho",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1y4jl5yhdxtc6.webp",
+                link: "https://s.shopee.com.br/14k4cp8IY"
+            },
+            {
+                id: 20,
+                name: "Rede de Banho",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mfbmjtx531mub8.webp",
+                link: "https://s.shopee.com.br/1VtXsTZU3g"
+            },
+
+            // ═══════════════════════════════════════════════════════
+            // INTRODUÇÃO ALIMENTAR DO BEBÊ (10 itens)
+            // ═══════════════════════════════════════════════════════
+            {
+                id: 21,
+                name: "Kit Chupeta + Prendedor MAM",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81ztc-mkdsjkoqoa9t90.webp",
+                link: "https://s.shopee.com.br/2B9Eg8M6ku"
+            },
+            {
+                id: 22,
+                name: "Kit Mamadeiras MAM (Cor Neutra)",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7wq4zqh94hd23.webp",
+                link: "https://s.shopee.com.br/BO8MXF0Dv"
+            },
+            {
+                id: 23,
+                name: "Kit Introdução Alimentar",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-8259v-meu5rwdm1khv4c.webp",
+                link: "https://s.shopee.com.br/6pv2HcIuAx"
+            },
+            {
+                id: 24,
+                name: "Kit Colher Dosadora + Chupeta Frutinhas",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rath-matzw3eybxwjb9.webp",
+                link: "https://s.shopee.com.br/4fqXhOxbvR"
+            },
+            {
+                id: 25,
+                name: "Colher Raspadora de Frutas",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lu6h2w5kqbts3d.webp",
+                link: "https://s.shopee.com.br/70ESTzU3mV"
+            },
+            {
+                id: 26,
+                name: "Copo de Água",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mf7gn8brt4p253.webp",
+                link: "https://s.shopee.com.br/1qWMMFW1on"
+            },
+            {
+                id: 27,
+                name: "Garrafinha",
+                image: "https://down-br.img.susercontent.com/file/ff845c519f2ecf594bc5e2d19f92fa1e.webp",
+                link: "https://s.shopee.com.br/qdpAQi5qO"
+            },
+            {
+                id: 28,
+                name: "Lancheira",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rd5j-lutofwbvhv5c93.webp",
+                link: "https://s.shopee.com.br/6KyljSmb0L"
+            },
+            {
+                id: 29,
+                name: "Forminhas de Picolé",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81ztc-mjjxm9wiv37l59.webp",
+                link: "https://s.shopee.com.br/1La5mKzXvO"
+            },
+
+            // ═══════════════════════════════════════════════════════
+            // DESENVOLVIMENTO DO BEBÊ (21 itens)
+            // ═══════════════════════════════════════════════════════
+            {
+                id: 30,
+                name: "Ruído Branco",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-minzlm738ge910.webp",
+                link: "https://s.shopee.com.br/9pYdnPUXPm"
+            },
+            {
+                id: 31,
+                name: "Urso Palmadinhas",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7renr-m82x2m4hp5t551.webp",
+                link: "https://s.shopee.com.br/6AfNNI6Nko"
+            },
+            {
+                id: 32,
+                name: "Mobile de Berço (Cor Neutra)",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mdb5zjmubeia7b.webp",
+                link: "https://s.shopee.com.br/5VPgaJXjAu"
+            },
+            {
+                id: 33,
+                name: "Jogo de Lençol",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-meowpl1fllohd3.webp",
+                link: "https://s.shopee.com.br/8AQRlY65UA"
+            },
+            {
+                id: 34,
+                name: "Cobertor Mantinha",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m8ainwygrawhe0.webp",
+                link: "https://s.shopee.com.br/5fj6nStwog"
+            },
+            {
+                id: 35,
+                name: "Kit Mordedores",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mdw4ldsihtz41c.webp",
+                link: "https://s.shopee.com.br/1La7a6u50F"
+            },
+            {
+                id: 36,
+                name: "Kit Chocalhos",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mi4jc5t94v7q02.webp",
+                link: "https://s.shopee.com.br/9fFFVO361L"
+            },
+            {
+                id: 37,
+                name: "Meias Interativas",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mi7n8fieujgh8c.webp",
+                link: "https://s.shopee.com.br/50TPx6Zere"
+            },
+            {
+                id: 38,
+                name: "Livro de Contraste",
+                image: "https://down-br.img.susercontent.com/file/br-11134201-23010-s13tiku4mvmvff.webp",
+                link: "https://s.shopee.com.br/4LDjAIep8E"
+            },
+            {
+                id: 39,
+                name: "Ventosa Giratória",
+                image: "https://down-br.img.susercontent.com/file/sg-11134301-7rav8-maktvpgooevl82.webp",
+                link: "https://s.shopee.com.br/2Vm4z2nRZY"
+            },
+            {
+                id: 40,
+                name: "Carangueijo Musical",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rav5-mazrb4s6hbau00.webp",
+                link: "https://s.shopee.com.br/70EULNQMk4"
+            },
+            {
+                id: 41,
+                name: "Cacto Interativo",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rcfc-lrq3zsmapgtx9e.webp",
+                link: "https://s.shopee.com.br/8V3I8C1N7y"
+            },
+            {
+                id: 42,
+                name: "Tapete de Água",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-8226i-mhgkikhtl8na65.webp",
+                link: "https://s.shopee.com.br/60Lx9fe0FW"
+            },
+            {
+                id: 43,
+                name: "Tapete Musical",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-824i7-me1jpv4n9j452b.webp",
+                link: "https://s.shopee.com.br/5L6GMcgdP6"
+            },
+            {
+                id: 44,
+                name: "Tapete de Atividades",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m5lj2xzj8k0ge1.webp",
+                link: "https://s.shopee.com.br/8pg8XKVJMu"
+            },
+            {
+                id: 45,
+                name: "Cadeirinha de Descanso Baby",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mg892iwzfa4n68.webp",
+                link: "https://s.shopee.com.br/6fbc1V0gVO"
+            },
+            {
+                id: 46,
+                name: "Mochila Almofada Queda",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-ma7qeoie2d8h2d.webp",
+                link: "https://s.shopee.com.br/2LSepg75iy"
+            },
+            {
+                id: 47,
+                name: "Poltrona Acolchoada",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81ztc-mjcz87em9iiu38.webp",
+                link: "https://s.shopee.com.br/6AfNOzGpio"
+            },
+            {
+                id: 48,
+                name: "Cercadinho (Cor Cinza)",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7ra2c-mblaemnshys63c.webp",
+                link: "https://s.shopee.com.br/8zzYkAuwb4"
+            },
+            {
+                id: 49,
+                name: "Cavalhinho de Madeira (Cor cerejeira)",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m2le7j562yv92a.webp",
+                link: "https://s.shopee.com.br/8071aje1Tf"
+            },
+            {
+		id: 50,
+                name: "Gangorra Montessori",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-mckxic0tq1hddf.webp",
+                link: "https://s.shopee.com.br/3VecEdzeCn"
+            },
+            
+
+            // ═══════════════════════════════════════════════════════
+            // PRATICIDADES PARA A MAMÃE (11 itens)
+            // ═══════════════════════════════════════════════════════
+            {
+                id: 51,
+                name: "Espelho Retrovisor Carro Baby",
+                image: "https://down-br.img.susercontent.com/file/ca54ae279da3185fbc0096e2a7ec6de3.webp",
+                link: "https://s.shopee.com.br/8AQPo5YTgY"
+            },
+            {
+                id: 52,
+                name: "Cesta Organizadora (Cor Bege)",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rdwd-mdsg3jvltjze8b.webp",
+                link: "https://s.shopee.com.br/2Vm55X0ydg"
+            },
+            {
+                id: 53,
+                name: "Capa para Almofada Amamentação",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lnh8dyxmx8sv58.webp",
+                link: "https://s.shopee.com.br/1BGhVD2xUr"
+            },
+            {
+                id: 54,
+                name: "Canguru Sling",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lr0hp1w9on505d.webp",
+                link: "https://s.shopee.com.br/14i5QQ1Ke"
+            },
+            {
+                id: 55,
+                name: "Canguru Cadeirinha",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7ra26-mb9unzkrk1yhbf.webp",
+                link: "https://s.shopee.com.br/4LDhFQv2mZ"
+            },
+            {
+                id: 56,
+                name: "Extratora de Leite",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rdxk-m0cvbv3yfgxw00.webp",
+                link: "https://s.shopee.com.br/5fj6sN3HDC"
+            },
+            {
+                id: 57,
+                name: "Sacos para Leite Materno",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lgz8wrjy3vqt7d.webp",
+                link: "https://s.shopee.com.br/AKUwQFyPdH"
+            },
+            {
+                id: 58,
+                name: "Rosquinhas Amamentação",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mhoqfnxuru9va8.webp",
+                link: "https://s.shopee.com.br/6pv4HmXBZ9"
+            },
+            {
+                id: 59,
+                name: "Lixeira Antiodor",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-megexxv9fpj680.webp",
+                link: "https://s.shopee.com.br/7VAl47i46j"
+            },
+            {
+                id: 60,
+                name: "Mochila Maternidade (Cor Azul)",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-821e8-mh1nwvzknytpf4.webp",
+                link: "https://s.shopee.com.br/7KrKsIo6yG"
+            },
+            {
+                id: 61,
+                name: "Babá Eletrônica",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-822wp-mhzw9i8d1wjp6e.webp",
+                link: "https://s.shopee.com.br/AUoMfttQMn"
+            },
+            {
+                id: 62,
+                name: "Cadeira Amamentação",
+                image: "https://down-br.img.susercontent.com/file/br-11134207-81z1k-mfvmt341y96sd8.webp",
+                link: "https://s.shopee.com.br/7VAl64LaOE"
+            }
+        ];
+
+        // ============================================
+        // LÓGICA DE ARMAZENAMENTO E RESERVAS
+        // ============================================
+        let currentGiftId = null;
+        let reservations = {};
+
+        // Carrega reservas do armazenamento
+        async function loadReservations() {
+            try {
+                const result = await window.storage.get('cha-pedro-reservations', true);
+                if (result && result.value) {
+                    reservations = JSON.parse(result.value);
+                }
+            } catch (error) {
+                console.log('Iniciando nova lista de reservas');
+                reservations = {};
+            }
+        }
+
+        // Salva reservas no armazenamento
+        async function saveReservations() {
+            try {
+                await window.storage.set('cha-pedro-reservations', JSON.stringify(reservations), true);
+            } catch (error) {
+                console.error('Erro ao salvar reservas:', error);
+                alert('Não foi possível salvar a reserva. Tente novamente.');
+            }
+        }
+
+        // Renderiza os presentes na tela
+        function renderGifts() {
+            const grid = document.getElementById('gifts-grid');
+            grid.innerHTML = '';
+
+            // Define as seções e seus intervalos de IDs
+            const sections = [
+                { title: '🩺 Cuidados com o Bebê', startId: 1, endId: 8 },
+                { title: '🧼 Higiene do Bebê', startId: 9, endId: 20 },
+                { title: '🍼 Introdução Alimentar do Bebê', startId: 21, endId: 29 },
+                { title: '🧸 Desenvolvimento do Bebê', startId: 30, endId: 50 },
+                { title: '👩‍🍼 Praticidades para a Mamãe', startId: 51, endId: 62 }
+            ];
+
+            sections.forEach(section => {
+                // Adiciona o título da seção
+                const sectionTitle = document.createElement('div');
+                sectionTitle.className = 'section-title';
+                sectionTitle.textContent = section.title;
+                grid.appendChild(sectionTitle);
+
+                // Adiciona os itens da seção
+                const sectionGifts = gifts.filter(gift => gift.id >= section.startId && gift.id <= section.endId);
+                
+                sectionGifts.forEach(gift => {
+                    const isReserved = reservations[gift.id];
+                    const card = document.createElement('div');
+                    card.className = `gift-card ${isReserved ? 'reserved' : ''}`;
+                    
+                    card.innerHTML = `
+                        <img src="${gift.image}" alt="${gift.name}" class="gift-image" onclick="openLink('${gift.link}')">
+                        <div class="gift-info">
+                            <div class="gift-name">${gift.name}</div>
+                            ${isReserved 
+                                ? `<p style="color: var(--terracota); font-size: 0.95rem; margin-top: 10px;">Reservado por: <strong>${isReserved}</strong></p>
+                                   <div class="gift-actions">
+                                       <button class="btn btn-unreserve" onclick="unreserveGift(${gift.id})">Cancelar reserva</button>
+                                   </div>`
+                                : `<div class="gift-actions">
+                                       <button class="btn btn-reserve" onclick="reserveGift(${gift.id})">Quero presentear! 🎁</button>
+                                   </div>`
+                            }
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+            });
+        }
+
+        // Abre link do produto
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+
+        // Reservar presente
+        function reserveGift(giftId) {
+            currentGiftId = giftId;
+            const gift = gifts.find(g => g.id === giftId);
+            document.getElementById('modal-title').textContent = `Presentear: ${gift.name}`;
+            document.getElementById('modal-message').textContent = 'Digite seu nome para reservar este presente:';
+            document.getElementById('guest-name').value = '';
+            document.getElementById('modal').classList.add('active');
+            document.getElementById('guest-name').focus();
+        }
+
+        // Cancelar reserva
+        async function unreserveGift(giftId) {
+            const guestName = reservations[giftId];
+            if (confirm(`Tem certeza que deseja cancelar a reserva de ${guestName}?`)) {
+                delete reservations[giftId];
+                await saveReservations();
+                renderGifts();
+            }
+        }
+
+        // Confirmar reserva
+        async function confirmReservation() {
+            const guestName = document.getElementById('guest-name').value.trim();
+            
+            if (!guestName) {
+                alert('Por favor, digite seu nome!');
+                return;
+            }
+
+            reservations[currentGiftId] = guestName;
+            await saveReservations();
+            closeModal();
+            renderGifts();
+            
+            alert(`Obrigado, ${guestName}! Seu presente foi reservado com sucesso! 💙`);
+        }
+
+        // Fechar modal
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            currentGiftId = null;
+        }
+
+        // Permite fechar com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Permite confirmar com Enter
+        document.getElementById('guest-name').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') confirmReservation();
+        });
+
+        // Inicializa a página
+        async function init() {
+            await loadReservations();
+            renderGifts();
+        }
+
+        init();
+    </script>
+</body>
+</html>
