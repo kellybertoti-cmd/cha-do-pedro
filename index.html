@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Presentes - Chá do Pedro</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -612,6 +617,37 @@
 
     <script>
         // ============================================
+        // CONFIGURAÇÃO DO FIREBASE
+        // ============================================
+        // ATENÇÃO: Você precisa criar um projeto no Firebase e substituir essas configurações
+        // Instruções completas no final do arquivo!
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDE5aPI792agmawVks-SjLCRzx5LLqZRF4",
+  authDomain: "cha-do-pedro-52b17.firebaseapp.com",
+  databaseURL: "https://cha-do-pedro-52b17-default-rtdb.firebaseio.com",
+  projectId: "cha-do-pedro-52b17",
+  storageBucket: "cha-do-pedro-52b17.firebasestorage.app",
+  messagingSenderId: "904537491805",
+  appId: "1:904537491805:web:da930c31b85a9c391640b4",
+  measurementId: "G-7VFS6P3TFM"
+        };
+
+        // Inicializa o Firebase
+        let database;
+        let reservationsRef;
+        
+        try {
+            firebase.initializeApp(firebaseConfig);
+            database = firebase.database();
+            reservationsRef = database.ref('reservations');
+            console.log('Firebase conectado com sucesso!');
+        } catch (error) {
+            console.error('Erro ao conectar com Firebase:', error);
+            alert('Erro ao conectar com o banco de dados. As reservas podem não funcionar corretamente.');
+        }
+
+        // ============================================
         // DADOS DOS PRESENTES
         // ============================================
         // INSTRUÇÕES PARA ADICIONAR FOTOS:
@@ -791,8 +827,8 @@
             },
             {
                 id: 24,
-                name: "Kit Mamadeiras MAM (Cor Neutra)",
-                image: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m7wq4zqh94hd23.webp",
+                name: "Kit Mamadeiras MAM (Cor Verde)",
+                image: "https://down-br.img.susercontent.com/file/sg-11134201-7rd4m-m7mkr3ddkigo36.webp",
                 link: "https://s.shopee.com.br/BO8MXF0Dv"
             },
             {
@@ -1111,32 +1147,60 @@
         ];
 
         // ============================================
-        // LÓGICA DE ARMAZENAMENTO E RESERVAS
+        // LÓGICA DE ARMAZENAMENTO E RESERVAS COM FIREBASE
         // ============================================
         let currentGiftId = null;
         let reservations = {};
 
-        // Carrega reservas do armazenamento
-        async function loadReservations() {
-            try {
-                const result = await window.storage.get('cha-pedro-reservations', true);
-                if (result && result.value) {
-                    reservations = JSON.parse(result.value);
-                }
-            } catch (error) {
-                console.log('Iniciando nova lista de reservas');
-                reservations = {};
+        // Carrega reservas do Firebase e monitora mudanças em tempo real
+        function loadReservations() {
+            if (!reservationsRef) {
+                console.error('Firebase não está configurado');
+                return;
             }
+
+            // Escuta mudanças em tempo real
+            reservationsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                reservations = data || {};
+                renderGifts();
+            }, (error) => {
+                console.error('Erro ao carregar reservas:', error);
+            });
         }
 
-        // Salva reservas no armazenamento
-        async function saveReservations() {
-            try {
-                await window.storage.set('cha-pedro-reservations', JSON.stringify(reservations), true);
-            } catch (error) {
-                console.error('Erro ao salvar reservas:', error);
-                alert('Não foi possível salvar a reserva. Tente novamente.');
+        // Salva reserva no Firebase
+        function saveReservation(giftId, guestName) {
+            if (!reservationsRef) {
+                alert('Erro: Firebase não está configurado. Contate o administrador.');
+                return;
             }
+
+            reservationsRef.child(giftId).set(guestName)
+                .then(() => {
+                    console.log('Reserva salva com sucesso!');
+                })
+                .catch((error) => {
+                    console.error('Erro ao salvar reserva:', error);
+                    alert('Não foi possível salvar a reserva. Tente novamente.');
+                });
+        }
+
+        // Remove reserva do Firebase
+        function removeReservation(giftId) {
+            if (!reservationsRef) {
+                alert('Erro: Firebase não está configurado. Contate o administrador.');
+                return;
+            }
+
+            reservationsRef.child(giftId).remove()
+                .then(() => {
+                    console.log('Reserva removida com sucesso!');
+                })
+                .catch((error) => {
+                    console.error('Erro ao remover reserva:', error);
+                    alert('Não foi possível cancelar a reserva. Tente novamente.');
+                });
         }
 
         // Renderiza os presentes na tela
@@ -1215,17 +1279,15 @@
         }
 
         // Cancelar reserva
-        async function unreserveGift(giftId) {
+        function unreserveGift(giftId) {
             const guestName = reservations[giftId];
             if (confirm(`Tem certeza que deseja cancelar a reserva de ${guestName}?`)) {
-                delete reservations[giftId];
-                await saveReservations();
-                renderGifts();
+                removeReservation(giftId);
             }
         }
 
         // Confirmar reserva
-        async function confirmReservation() {
+        function confirmReservation() {
             const guestName = document.getElementById('guest-name').value.trim();
             
             if (!guestName) {
@@ -1233,10 +1295,8 @@
                 return;
             }
 
-            reservations[currentGiftId] = guestName;
-            await saveReservations();
+            saveReservation(currentGiftId, guestName);
             closeModal();
-            renderGifts();
             
             alert(`Obrigado, ${guestName}! Seu presente foi reservado com sucesso! 💙`);
         }
@@ -1258,12 +1318,101 @@
         });
 
         // Inicializa a página
-        async function init() {
-            await loadReservations();
+        function init() {
+            loadReservations();
             renderGifts();
         }
 
         init();
     </script>
+
+    <!-- 
+    ╔═══════════════════════════════════════════════════════════════════════════════╗
+    ║                    INSTRUÇÕES PARA CONFIGURAR O FIREBASE                       ║
+    ║                    (Sistema de Reservas Compartilhadas)                        ║
+    ╚═══════════════════════════════════════════════════════════════════════════════╝
+    
+    PASSO A PASSO COMPLETO:
+    
+    1. CRIAR CONTA NO FIREBASE (GRÁTIS):
+       ➜ Acesse: https://firebase.google.com/
+       ➜ Clique em "Ir para o console" (canto superior direito)
+       ➜ Faça login com sua conta Google
+    
+    2. CRIAR UM NOVO PROJETO:
+       ➜ Clique em "Adicionar projeto"
+       ➜ Nome do projeto: "cha-bebe-pedro" (ou outro nome)
+       ➜ Desative o Google Analytics (não é necessário)
+       ➜ Clique em "Criar projeto"
+       ➜ Aguarde alguns segundos até o projeto ser criado
+    
+    3. CRIAR O REALTIME DATABASE:
+       ➜ No menu lateral esquerdo, clique em "Realtime Database"
+       ➜ Clique em "Criar banco de dados"
+       ➜ Local: escolha "United States (us-central1)"
+       ➜ Regras de segurança: escolha "Iniciar no modo de TESTE"
+       ➜ Clique em "Ativar"
+    
+    4. CONFIGURAR REGRAS DE SEGURANÇA:
+       ➜ Ainda na página do Realtime Database, clique na aba "Regras"
+       ➜ Substitua o conteúdo por este código:
+       
+       {
+         "rules": {
+           "reservations": {
+             ".read": true,
+             ".write": true
+           }
+         }
+       }
+       
+       ➜ Clique em "Publicar"
+    
+    5. OBTER AS CONFIGURAÇÕES DO PROJETO:
+       ➜ No menu lateral, clique no ícone de engrenagem ⚙️ ao lado de "Visão geral do projeto"
+       ➜ Clique em "Configurações do projeto"
+       ➜ Role a página até "Seus aplicativos" e clique no ícone "</>" (Web)
+       ➜ Nome do app: "Lista de Presentes"
+       ➜ NÃO marque "Firebase Hosting"
+       ➜ Clique em "Registrar app"
+       ➜ Copie APENAS o código dentro de "firebaseConfig" (as linhas entre { })
+    
+    6. COLAR AS CONFIGURAÇÕES NO CÓDIGO:
+       ➜ Volte para este arquivo HTML
+       ➜ Procure por "const firebaseConfig" (logo no início do script)
+       ➜ Substitua as linhas que têm "SUA_API_KEY_AQUI", "SEU_PROJETO", etc.
+       ➜ Cole as configurações que você copiou do Firebase
+    
+    7. EXEMPLO DO QUE VOCÊ VAI SUBSTITUIR:
+       
+       ANTES (código atual):
+       const firebaseConfig = {
+           apiKey: "SUA_API_KEY_AQUI",
+           authDomain: "SEU_PROJETO.firebaseapp.com",
+           ...
+       };
+       
+       DEPOIS (com suas configurações do Firebase):
+       const firebaseConfig = {
+           apiKey: "AIzaSyC1234567890abcdefghijk",
+           authDomain: "cha-bebe-pedro.firebaseapp.com",
+           databaseURL: "https://cha-bebe-pedro-default-rtdb.firebaseio.com",
+           projectId: "cha-bebe-pedro",
+           storageBucket: "cha-bebe-pedro.appspot.com",
+           messagingSenderId: "123456789012",
+           appId: "1:123456789012:web:abc123def456"
+       };
+    
+    8. SALVAR E TESTAR:
+       ➜ Salve este arquivo HTML
+       ➜ Faça upload para o GitHub
+       ➜ Abra o site em dois navegadores diferentes
+       ➜ Reserve um item em um navegador
+       ➜ Atualize o outro navegador - a reserva deve aparecer!
+    
+    ✅ PRONTO! Agora as reservas são compartilhadas entre todos os visitantes em tempo real!
+    
+    📌 DICA: Se tiver problemas, abra o Console do navegador (F12) e veja se há erros.
+    -->
 </body>
 </html>
